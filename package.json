@@ -1,0 +1,14 @@
+{
+  "name": "docker-assignment",
+  "version": "1.0.0",
+  "description": "Creating rest APIs to deploy on docker",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ME",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.3"
+  }
+}
