@@ -22,12 +22,14 @@ setInterval( () => {
   })
     
   })
-  }, 5000);
+  }, 1000);
 
-app.post("/primeNumber", (req, res) => {
+app.get("/primeNumber/:start/:end", (req, res) => {
   try {
-    let start = req.body.start;
-    let end = req.body.end;
+    var f = fs.createWriteStream("data.txt");
+
+    let start = req.params.start;
+    let end = req.params.end;
     var arr = [];
 
     for (let i = start; i <= end; i++) {
@@ -45,13 +47,13 @@ app.post("/primeNumber", (req, res) => {
       }
     }
     
-    file.on("error", function (err) {
+    f.on("error", function (err) {
       console.log(err);
     });
     arr.forEach(function (v) {
-      file.write(v + "\n");
+      f.write(v + "\n");
     });
-    file.end();
+    f.end();
     res.send("File has been successfully written");
   } catch (err) {
     res.send(err.message).statusCode(404);
@@ -72,17 +74,17 @@ app.get("/getPrime", (req, res) => {
   }
 });
 
-app.post("/usage", (req, res) => {
+app.get("/usage/:time", (req, res) => {
   try {
     let obj={
-      a:0,
-      b:0
+      cpu_usage:0,
+      mem_usage:0,
     };
     let sum=0,add=0;
     var memArr=[];
     var cpuArr=[];
     let current = Date.now();
-    let start = new Date-req.body.time*60*1000;
+    let start = new Date-req.params.time*60*1000;
     csvtojson()
     .fromFile('time.csv')
     .then(async(source) =>  {
@@ -101,8 +103,8 @@ app.post("/usage", (req, res) => {
           sum=sum+cpuArr[i];
           add=add+memArr[i];
          }
-         obj.a=sum/cpuArr.length;
-         obj.b=add/cpuArr.length;
+         obj.cpu_usage=sum/cpuArr.length;
+         obj.mem_usage=add/cpuArr.length;
         res.send({body:obj});
     });
   } catch (err) {
